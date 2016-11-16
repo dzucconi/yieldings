@@ -1,6 +1,7 @@
 import { diffChars } from 'diff';
 
 const STATE = {
+  edited: false,
   editor: '',
   removed: '',
 };
@@ -22,6 +23,10 @@ export default () => {
 
   STATE.editor = DOM.editor.value;
 
+  DOM.editor.addEventListener('touchstart', () => {
+    setTimeout(() => window.scrollTo(0, 0), 500);
+  });
+
   DOM.editor.addEventListener('input', () => {
     const diff = diffChars(STATE.editor, DOM.editor.value);
 
@@ -39,6 +44,11 @@ export default () => {
     }
 
     STATE.editor = DOM.editor.value;
+
+    if (!STATE.edited) {
+      STATE.edited = true;
+      DOM.reset.innerText = 'reset';
+    }
   });
 
   DOM.reset.addEventListener('click', e => {
@@ -52,5 +62,6 @@ export default () => {
     }
 
     DOM.editor.focus();
+    setTimeout(() => window.scrollTo(0, 0), 500);
   });
 };

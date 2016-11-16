@@ -34,6 +34,8 @@ textarea {
   height: 100%;
   appearance: none;
   border: none;
+  border-radius: 0;
+  padding: 1em;
 }
 
 .editor {
@@ -53,5 +55,5 @@ textarea {
   padding: 1em;
   text-decoration: none;
   cursor: pointer;
-  color: blue;
+  color: black;
 }
