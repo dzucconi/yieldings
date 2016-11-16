@@ -14,8 +14,8 @@ const DOM = {
 
 export default () => {
   try {
-    STATE.editor = DOM.editor.value = localStorage.getItem('editor');
-    STATE.removed = DOM.removed.value = localStorage.getItem('removed');
+    STATE.editor = DOM.editor.value = localStorage.getItem('editor') || '';
+    STATE.removed = DOM.removed.value = localStorage.getItem('removed') || '';
   } catch(e) {
     // Ignore
   }
