@@ -1,0 +1,57 @@
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: gray;
+}
+
+body,
+textarea {
+  font-size: 20px;
+  -webkit-font-smoothing: antialiased;
+  font-family: 'Helvetica Neue', sans-serif;
+  color: #222;
+}
+
+textarea {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  height: 100%;
+  appearance: none;
+  border: none;
+}
+
+.editor {
+  left: 0;
+  right: 50%;
+}
+
+.removed {
+  left: 50%;
+  right: 0;
+}
+
+.reset {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 1em;
+  text-decoration: none;
+  cursor: pointer;
+  color: blue;
+}
