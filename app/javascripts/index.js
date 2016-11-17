@@ -47,7 +47,7 @@ export default () => {
 
     if (!STATE.edited) {
       STATE.edited = true;
-      DOM.reset.innerText = 'reset';
+      DOM.reset.style.opacity = 1;
     }
   });
 

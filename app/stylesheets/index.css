@@ -56,4 +56,10 @@ textarea {
   text-decoration: none;
   cursor: pointer;
   color: black;
+  opacity: 0;
+  transition: opacity 0.5s;
+  text-transform: lowercase;
 }
+  .reset:hover {
+    opacity: 1;
+  }
