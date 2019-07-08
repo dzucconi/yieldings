@@ -1,5 +1,7 @@
 # Yieldings
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/e4073e73-9d7c-4bde-bb01-922429177b90/deploy-status)](https://app.netlify.com/sites/damonzucconi-yieldings/deploys)
+
 A text editor prototype that keeps track of deleted text.
 
 ## Meta
