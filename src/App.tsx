@@ -31,6 +31,10 @@ const Container = styled.div`
   display: flex;
   height: 100vh;
 
+  @media (max-width: 800px) {
+    flex-direction: column;
+  }
+
   > * {
     flex: 1;
     background-color: transparent;
