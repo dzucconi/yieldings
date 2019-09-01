@@ -11,6 +11,7 @@
     "@types/styled-components": "4.1.18",
     "diff": "4.0.1",
     "humanization": "6.2.0",
+    "queryparams": "0.1.0",
     "react": "16.9.0",
     "react-dom": "16.9.0",
     "react-scripts": "3.1.1",

@@ -3,17 +3,9 @@ import styled from "styled-components";
 import { humanize, simulateTyping, simulateStrokeTiming } from "humanization";
 import { diffChars } from "diff";
 
+import { sample } from "./lib/sample";
+import { SPELLINGS } from "./data";
 import { Textarea } from "./components/Textarea";
-
-const initialMessage = `
-  He used an analog Oberheim 'Xpander' synth, hence the name of the track...
-  it was built in the mid Eighties...
-  which I have owned and has this characteristic lush sound...
-  the synth itself plays a huge part in this track...
-  Warm sounding (now impossible to find) CEM chips through the Xpanders huge modulation matrix with 19 or so filter types...!
-  they say an instrument can repay itself...
-  I wonder how much cash this track made him!
-`;
 
 const diffRemoved = ({
   prevValue,
@@ -46,7 +38,6 @@ const Container = styled.div`
 `;
 
 interface State {
-  inputValue?: string;
   value: string;
   removed: string;
 }
@@ -87,9 +78,8 @@ interface Props {
   autoPlay?: boolean;
 }
 
-const App: React.FC<Props> = ({ autoPlay = false }) => {
+const App: React.FC<Props> = ({ autoPlay = true }) => {
   const [state, dispatch] = useReducer(reducer, {
-    inputValue: initialMessage,
     removed: "",
     value: ""
   });
@@ -97,7 +87,7 @@ const App: React.FC<Props> = ({ autoPlay = false }) => {
   useEffect(() => {
     if (autoPlay) {
       simulateTyping({
-        stream: humanize(initialMessage).stream,
+        stream: humanize(sample(SPELLINGS)).stream,
         onStroke: ({ stroke, previousStroke }) => {
           return new Promise(async resolve => {
             dispatch({

@@ -1,12 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import parameters from "queryparams";
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import App from "./App";
+import * as serviceWorker from "./serviceWorker";
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+import "./index.css";
+
+const { autoPlay } = parameters({ autoPlay: false });
+
+ReactDOM.render(<App autoPlay={autoPlay} />, document.getElementById("root"));
+
+serviceWorker.register();
