@@ -1,11 +1,9 @@
-import React, { useReducer, useEffect } from "react";
+import React, { useReducer, useRef, useCallback } from "react";
 import styled from "styled-components";
-import { humanize, simulateTyping, simulateStrokeTiming } from "humanization";
 import { diffChars } from "diff";
 
-import { sample } from "./lib/sample";
-import { SPELLINGS } from "./data";
 import { Textarea } from "./components/Textarea";
+import { useAutoplay } from "./hooks/useAutoplay";
 
 const diffRemoved = ({
   prevValue,
@@ -41,18 +39,24 @@ const Container = styled.div`
   }
 `;
 
-interface State {
+export interface State {
   value: string;
   removed: string;
 }
 
-type Action =
+export type Action =
+  | { type: "RESET" }
   | { type: "UPDATE"; payload: { value: string } }
   | { type: "APPEND"; payload: { character: string } }
   | { type: "BACKSPACE" };
 
 const reducer = (state: State, action: Action) => {
   switch (action.type) {
+    case "RESET":
+      return {
+        value: "",
+        removed: ""
+      };
     case "UPDATE":
       return {
         ...state,
@@ -83,69 +87,26 @@ interface Props {
 }
 
 const App: React.FC<Props> = ({ autoPlay = true }) => {
+  const textarea = useRef<HTMLTextAreaElement>(null!);
+
   const [state, dispatch] = useReducer(reducer, {
     removed: "",
     value: ""
   });
 
-  useEffect(() => {
-    if (autoPlay) {
-      simulateTyping({
-        stream: humanize(sample(SPELLINGS)).stream,
-        onStroke: ({ stroke, previousStroke }) => {
-          return new Promise(async resolve => {
-            dispatch({
-              type: "APPEND",
-              payload: { character: stroke.character }
-            });
-
-            await simulateStrokeTiming();
-
-            // omitted character, re-append correct one
-            if (stroke.character.length === 0) {
-              dispatch({
-                type: "APPEND",
-                payload: { character: stroke.processedCharacter.source }
-              });
-
-              await simulateStrokeTiming();
-            }
-
-            // mistaken character, backspace then correct
-            if (
-              stroke.character !== stroke.processedCharacter.source &&
-              stroke.character.length !== 0
-            ) {
-              dispatch({ type: "BACKSPACE" });
-              await simulateStrokeTiming();
-
-              dispatch({
-                type: "APPEND",
-                payload: { character: stroke.processedCharacter.source }
-              });
-
-              await simulateStrokeTiming({ pauseMax: 500 });
-            }
-
-            // repeated character, backspace
-            if (
-              stroke.index.join("") ===
-              (previousStroke && previousStroke.index.join(""))
-            ) {
-              dispatch({ type: "BACKSPACE" });
-              await simulateStrokeTiming();
-            }
-
-            resolve();
-          });
-        }
+  const handleInput = useCallback(
+    (event: React.FormEvent<HTMLTextAreaElement>) => {
+      dispatch({
+        type: "UPDATE",
+        payload: { value: event.currentTarget.value }
       });
-    }
-  }, [autoPlay]);
+    },
+    []
+  );
 
-  const handleInput = (event: React.FormEvent<HTMLTextAreaElement>) => {
-    dispatch({ type: "UPDATE", payload: { value: event.currentTarget.value } });
-  };
+  const handleSelect = useCallback(() => textarea.current.select(), []);
+
+  useAutoplay({ autoPlay, dispatch, onSelect: handleSelect });
 
   return (
     <Container>
@@ -154,6 +115,7 @@ const App: React.FC<Props> = ({ autoPlay = true }) => {
         autoFocus={state.value === ""}
         onInput={handleInput}
         placeholder="Type"
+        ref={textarea}
       />
       <Textarea readOnly value={state.removed} placeholder="Removals" />
     </Container>

@@ -1,12 +1,7 @@
-import React from "react";
 import styled from "styled-components";
 
-interface Props extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
-
-const Input = styled.textarea`
+export const Textarea = styled.textarea`
   font-size: 2rem;
   padding: 0.5em 0.75em;
   color: currentColor;
 `;
-
-export const Textarea: React.FC<Props> = ({ ...rest }) => <Input {...rest} />;
