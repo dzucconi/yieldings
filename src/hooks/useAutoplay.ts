@@ -80,6 +80,8 @@ export const useAutoplay = ({
           await wait(1000);
 
           dispatch({ type: "UPDATE", payload: { value: "" } });
+
+          return Promise.resolve();
         })
         .then(async () => {
           await wait(2000);
