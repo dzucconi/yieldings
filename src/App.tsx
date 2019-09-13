@@ -4,6 +4,7 @@ import { diffChars } from "diff";
 
 import { Textarea } from "./components/Textarea";
 import { useAutoplay } from "./hooks/useAutoplay";
+import { sounds } from "./audio";
 
 const diffRemoved = ({
   prevValue,
@@ -67,18 +68,22 @@ const reducer = (state: State, action: Action) => {
         }),
         value: action.payload.value
       };
-    case "APPEND":
+    case "APPEND": {
+      sounds.tock.play();
       const nextValue = state.value + action.payload.character;
       return {
         ...state,
         value: nextValue
       };
-    case "BACKSPACE":
+    }
+    case "BACKSPACE": {
+      sounds.tock.play();
       return {
         ...state,
         value: state.value.substr(0, state.value.length - 1),
         removed: state.removed + state.value[state.value.length - 1]
       };
+    }
   }
 };
 
