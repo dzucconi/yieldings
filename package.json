@@ -12,7 +12,7 @@
     "@types/styled-components": "4.1.19",
     "diff": "4.0.1",
     "howler": "2.1.2",
-    "humanization": "6.2.0",
+    "humanization": "6.2.1",
     "queryparams": "0.1.0",
     "react": "16.9.0",
     "react-dom": "16.9.0",
