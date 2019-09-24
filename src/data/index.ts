@@ -1,12 +1,17 @@
-export const SPELLINGS = [
-  "A summer sunset. The taper burns. The time for slumber. A solid timber. A signal for the ship. A shady place. An ugly temper. A red wafer. He spoke truly. A blue slipper. The spider will not harm you. Do not be tardy. A very useful box. A total loss. The old tavern. A wily fox. Our notions vary. Be wary: do not go on the ice.",
-  "Let the door be ajar. Begin well. Behold the sun. Assist them. Attend to what I say. She began to cry. He is still abed. His abode is not far. A long time ago. You amaze me. Amend your way of life. Step aside. Go away. I can stand alone. Try to behave better. I awoke at six o'clock. Admit the bearer. Behind a fence.",
-  "The new hotel. I made a mistake. Be polite. Permit me to go. I had a mishap. Delay not. I deny thee not. Omit that page. The lapel of a coat. Will they elect him? Hereby you shall find out. I love the human. Perhaps he will invite you. Why dislike her? An entire day. Do not forget. My sister has some japan work.",
-  "A serene day. A severe storm. Rebuke the bad. Recite thy lesson. Relate the story. Rely on me. You may retire. Select a pen. Submit with a good grace. The cart was upset. Uphold the weak. Uplift the lowly. Unless you are unkind, you will do it. Unite with the good. Shun the unjust. Unlace my dress. The dog is unfed. An unripe plum. She stood upon a post. I will wait until you come.",
-  "A strange change. Baste the hem. Cows graze. Boys skate and wade. Do not scrape the slate. Slake thy thirst. Grace is in all her steps. A turning-lathe. A chaste style. I crave pardon. You are a craven. Hit the snake with the spade. Chafe the nape of his neck. Make a cage. A grange is a farm-house. A range of hills. Sour grapes. She quakes with fear. Brace the drum. Scale the hills. He ate a cake. The grade of the street.",
-  "The stranger is a trader. The dog in the manger. A famous patron. The matron has a cambric robe. Put a label on the paper. The angel Gabriel. The apex of the hill. Pastry makes me ill. A poor changeling. Give not way to hatred. A scraper for the feet. Wafer the letter. Shun the gamester. The sacred book. Frustrate his plans. By cognate we mean akin. The nimate of the hut is an ingrate. A fine landscape. An ornate style. Vacate my room. This mundane home. Do not strike the prostrate. A radix is a root.",
-  "Forsake evil. Escape danger. A brocade dress. Do not estrange us. Erase my name. We inhale air. Impale not the butterfly. The cascade falls. Arrange her dress. A sedate mood. What a grimace! Do not derange my books. You inflame her temper.",
-  "They build a house. A crypt is a sort of cave. A myth is a fable. The calyx of a flower. Be busy. A conduit for water. Put down the ferule. A head of lettuce. Syringe the plants. Wait a minute. Tune the guitar. Tortoise shell. I gave the poor man a guinea. A bunch of hyssop. A lyric poem.",
-  "An amethyst cup. A stove-pipe is in the form of a cylinder. We inhale oxygen. A sycamore tree. The pyramids of Egypt. Tell me what you mean by a syllable. Never play the hypocrite. A synonym is a word having the same meaning as another word. An attack of dysentery. She has the dyspepsy. She must try gymnastic extercise. On me when dunces are satiric. I take it for a panegyric. Polygamy was common in Utah. An idiosyncrasy or peculiarity, of her constitution",
-  "A sudden movement. Illustrious achievements. That which is awful inspires aw. You argue the point, but your arguments are old. A convenient abridgement. Accept my acknowledgement for your judgment. A graceless youth. A peaceful assembly. A rueful glance. His management failed. Excuse my hoarseness. My engagements forbid."
+export interface Exercise {
+  title: string;
+  exercises: string[];
+}
+
+export const EXERCISES: Exercise[] = [
+  {
+    title: "The Sound of A in Far",
+    exercises: [
+      "The blind bard. The bark of the larch. The chart is in the barge. We fish for carp. Do not carp at my farce. A cart in the park. Darn my sock. Do not gape. A harsh smart. The barb of the hook. Tar is on the spar. A pot of lard. The star shines.",
+      "A large farm. Marl is a kind of clay. The yarn is in a snarl. The stocks are at par. Starch my scarf. Carve with a sharp knife. Start not. Parse that line. You shall not starve. Hear my charge. A wide path. A hot bath. Stanch the wound.",
+      "Our barber is an archer. He mounts his charger. A cartridge box. A fat partridge. Market is the place for barter. My father knows a carpenter. He had a jaunty manner. Carmine is crimson. I can go no farther Garnet is a gem. The time of harvest. The margin of the lake. A big parsnip. My partner in trade. Smell of the hartshorn. Starboard is the right-hand side of a ship ; larboard, the left.",
+      "A scarlet dress. A starveling dog. Tartar is sour. The varlet had a cigar. Alarm the city. Unbar the door. Let him depart. Do not debar his coaling. Disarm him. Let us embark. Discharge the prisoner. It will retard my going. What did you remark? Discard evil. A barberry bush. Quince marmalade. A martingal for the horse.",
+      "My dauntless aunt took a jaunt to see a launch. Do not taunt her. A gaunt form. Guard the haunch. A haunt for robbers. They run the gauntlet. A staunch friend. The sergeant is hearty. Where is Taunton? Sit on the hearth, and hearken. Yellow with the jaundice. She flaunts in a gay dress. Let us saunter along. To vaunt is to brag. Avaunt ye triflers! Dogs craunch bones. Go to the laundry."
+    ]
+  }
 ];
