@@ -11,4 +11,4 @@ const { autoPlay } = parameters({ autoPlay: false });
 
 ReactDOM.render(<App autoPlay={autoPlay} />, document.getElementById("root"));
 
-serviceWorker.register();
+serviceWorker.unregister(); // disabled for now
