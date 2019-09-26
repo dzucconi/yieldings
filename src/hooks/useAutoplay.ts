@@ -1,44 +1,69 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer } from "react";
 import { humanize, simulateTyping, simulateStrokeTiming } from "humanization";
 
-import { Action } from "../App";
-import { sample } from "../lib/sample";
-import { SPELLINGS } from "../data";
+import { Exercise } from "../data";
 
 const wait = (ms: number): Promise<void> =>
   new Promise(resolve => setTimeout(resolve, ms));
 
+type Action = { type: "NEXT" };
+
+interface State {
+  cursor: number;
+  input: string;
+  exercises: string[];
+}
+
+const reducer = (state: State, action: Action): State => {
+  switch (action.type) {
+    case "NEXT": {
+      const nextCursor = state.cursor + 1;
+      return {
+        ...state,
+        cursor: nextCursor,
+        input: state.exercises[nextCursor % state.exercises.length]
+      };
+    }
+  }
+};
+
 export const useAutoplay = ({
+  exercise,
   autoPlay,
-  dispatch,
-  onSelect
+  onSelect,
+  onAppend,
+  onBackspace,
+  onReset,
+  onUpdate
 }: {
+  exercise: Exercise;
   autoPlay: boolean;
-  dispatch: React.Dispatch<Action>;
   onSelect(): void;
+  onAppend(character: string): void;
+  onBackspace(): void;
+  onReset(): void;
+  onUpdate(value: string): void;
 }) => {
-  const [input, updateInput] = useState(sample(SPELLINGS));
+  const [state, dispatch] = useReducer(reducer, {
+    cursor: 0,
+    input: exercise.exercises[0],
+    exercises: exercise.exercises
+  });
 
   useEffect(() => {
     if (autoPlay) {
-      const { stream } = humanize(input);
+      const { stream } = humanize(state.input);
+
       simulateTyping({
         stream,
         onStroke: ({ stroke, previousStroke }) => {
           return new Promise(async resolve => {
-            dispatch({
-              type: "APPEND",
-              payload: { character: stroke.character }
-            });
-
+            onAppend(stroke.character);
             await simulateStrokeTiming();
 
             // omitted character, re-append correct one
             if (stroke.character.length === 0) {
-              dispatch({
-                type: "APPEND",
-                payload: { character: stroke.processedCharacter.source }
-              });
+              onAppend(stroke.processedCharacter.source);
 
               await simulateStrokeTiming();
             }
@@ -48,13 +73,10 @@ export const useAutoplay = ({
               stroke.character !== stroke.processedCharacter.source &&
               stroke.character.length !== 0
             ) {
-              dispatch({ type: "BACKSPACE" });
+              onBackspace();
               await simulateStrokeTiming();
 
-              dispatch({
-                type: "APPEND",
-                payload: { character: stroke.processedCharacter.source }
-              });
+              onAppend(stroke.processedCharacter.source);
 
               await simulateStrokeTiming({ pauseMax: 500 });
             }
@@ -64,7 +86,7 @@ export const useAutoplay = ({
               stroke.index.join("") ===
               (previousStroke && previousStroke.index.join(""))
             ) {
-              dispatch({ type: "BACKSPACE" });
+              onBackspace();
               await simulateStrokeTiming();
             }
 
@@ -74,24 +96,25 @@ export const useAutoplay = ({
       })
         .then(async () => {
           await wait(5000);
-
           onSelect();
-
           await wait(1000);
-
-          dispatch({ type: "UPDATE", payload: { value: "" } });
-
+          onUpdate("");
           return Promise.resolve();
         })
         .then(async () => {
           await wait(2000);
-
-          const nextInput = sample(SPELLINGS);
-
-          dispatch({ type: "RESET" });
-
-          updateInput(nextInput);
+          onReset();
+          dispatch({ type: "NEXT" });
         });
     }
-  }, [autoPlay, dispatch, input, onSelect]);
+  }, [
+    autoPlay,
+    exercise,
+    state.input,
+    onAppend,
+    onBackspace,
+    onReset,
+    onSelect,
+    onUpdate
+  ]);
 };

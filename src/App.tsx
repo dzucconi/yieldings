@@ -5,6 +5,7 @@ import { diffChars } from "diff";
 import { Textarea } from "./components/Textarea";
 import { useAutoplay } from "./hooks/useAutoplay";
 import { sounds } from "./audio";
+import { EXERCISES } from "./data";
 
 const diffRemoved = ({
   prevValue,
@@ -91,7 +92,7 @@ interface Props {
   autoPlay?: boolean;
 }
 
-const App: React.FC<Props> = ({ autoPlay = true }) => {
+const App: React.FC<Props> = ({ autoPlay = false }) => {
   const textarea = useRef<HTMLTextAreaElement>(null!);
 
   const [state, dispatch] = useReducer(reducer, {
@@ -111,7 +112,34 @@ const App: React.FC<Props> = ({ autoPlay = true }) => {
 
   const handleSelect = useCallback(() => textarea.current.select(), []);
 
-  useAutoplay({ autoPlay, dispatch, onSelect: handleSelect });
+  const handleAppend = useCallback((character: string) => {
+    dispatch({
+      type: "APPEND",
+      payload: { character }
+    });
+  }, []);
+
+  const handleBackspace = useCallback(
+    () => dispatch({ type: "BACKSPACE" }),
+    []
+  );
+
+  const handleUpdate = useCallback(
+    (value: string) => dispatch({ type: "UPDATE", payload: { value } }),
+    []
+  );
+
+  const handleReset = useCallback(() => dispatch({ type: "RESET" }), []);
+
+  useAutoplay({
+    exercise: EXERCISES[0],
+    autoPlay,
+    onSelect: handleSelect,
+    onAppend: handleAppend,
+    onBackspace: handleBackspace,
+    onReset: handleReset,
+    onUpdate: handleUpdate
+  });
 
   return (
     <Container>
