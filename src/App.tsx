@@ -132,7 +132,7 @@ const App: React.FC<Props> = ({ autoPlay = false }) => {
   const handleReset = useCallback(() => dispatch({ type: "RESET" }), []);
 
   useAutoplay({
-    exercise: EXERCISES[0],
+    exercise: EXERCISES["The Sound of A in Fall"],
     autoPlay,
     onSelect: handleSelect,
     onAppend: handleAppend,
