@@ -51,6 +51,13 @@ export const useAutoplay = ({
   });
 
   useEffect(() => {
+    document.title = exercise.title;
+    return () => {
+      document.title = "Yieldings";
+    };
+  }, [exercise.title]);
+
+  useEffect(() => {
     const { stream } = humanize(state.input);
 
     simulateTyping({
