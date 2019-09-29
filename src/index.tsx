@@ -8,7 +8,7 @@ import * as serviceWorker from "./serviceWorker";
 
 import "./index.css";
 
-const { autoPlay } = parameters({ autoPlay: false });
+const { autoPlay } = parameters({ autoPlay: null });
 
 if (autoPlay) {
   ambient();

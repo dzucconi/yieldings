@@ -27,23 +27,23 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-export const useAutoplay = ({
-  exercise,
-  autoPlay,
-  onSelect,
-  onAppend,
-  onBackspace,
-  onReset,
-  onUpdate
-}: {
+export interface Props {
   exercise: Exercise;
-  autoPlay: boolean;
   onSelect(): void;
   onAppend(character: string): void;
   onBackspace(): void;
   onReset(): void;
   onUpdate(value: string): void;
-}) => {
+}
+
+export const useAutoplay = ({
+  exercise,
+  onSelect,
+  onAppend,
+  onBackspace,
+  onReset,
+  onUpdate
+}: Props) => {
   const [state, dispatch] = useReducer(reducer, {
     cursor: 0,
     input: exercise.exercises[0],
@@ -51,64 +51,61 @@ export const useAutoplay = ({
   });
 
   useEffect(() => {
-    if (autoPlay) {
-      const { stream } = humanize(state.input);
+    const { stream } = humanize(state.input);
 
-      simulateTyping({
-        stream,
-        onStroke: ({ stroke, previousStroke }) => {
-          return new Promise(async resolve => {
-            onAppend(stroke.character);
+    simulateTyping({
+      stream,
+      onStroke: ({ stroke, previousStroke }) => {
+        return new Promise(async resolve => {
+          onAppend(stroke.character);
+          await simulateStrokeTiming();
+
+          // omitted character, re-append correct one
+          if (stroke.character.length === 0) {
+            onAppend(stroke.processedCharacter.source);
+
+            await simulateStrokeTiming();
+          }
+
+          // mistaken character, backspace then correct
+          if (
+            stroke.character !== stroke.processedCharacter.source &&
+            stroke.character.length !== 0
+          ) {
+            onBackspace();
             await simulateStrokeTiming();
 
-            // omitted character, re-append correct one
-            if (stroke.character.length === 0) {
-              onAppend(stroke.processedCharacter.source);
+            onAppend(stroke.processedCharacter.source);
 
-              await simulateStrokeTiming();
-            }
+            await simulateStrokeTiming({ pauseMax: 500 });
+          }
 
-            // mistaken character, backspace then correct
-            if (
-              stroke.character !== stroke.processedCharacter.source &&
-              stroke.character.length !== 0
-            ) {
-              onBackspace();
-              await simulateStrokeTiming();
+          // repeated character, backspace
+          if (
+            stroke.index.join("") ===
+            (previousStroke && previousStroke.index.join(""))
+          ) {
+            onBackspace();
+            await simulateStrokeTiming();
+          }
 
-              onAppend(stroke.processedCharacter.source);
-
-              await simulateStrokeTiming({ pauseMax: 500 });
-            }
-
-            // repeated character, backspace
-            if (
-              stroke.index.join("") ===
-              (previousStroke && previousStroke.index.join(""))
-            ) {
-              onBackspace();
-              await simulateStrokeTiming();
-            }
-
-            resolve();
-          });
-        }
-      })
-        .then(async () => {
-          await wait(5000);
-          onSelect();
-          await wait(1000);
-          onUpdate("");
-          return Promise.resolve();
-        })
-        .then(async () => {
-          await wait(2000);
-          onReset();
-          dispatch({ type: "NEXT" });
+          resolve();
         });
-    }
+      }
+    })
+      .then(async () => {
+        await wait(5000);
+        onSelect();
+        await wait(1000);
+        onUpdate("");
+        return Promise.resolve();
+      })
+      .then(async () => {
+        await wait(2000);
+        onReset();
+        dispatch({ type: "NEXT" });
+      });
   }, [
-    autoPlay,
     exercise,
     state.input,
     onAppend,

@@ -3,6 +3,8 @@ export interface Exercise {
   exercises: string[];
 }
 
+export type Title = keyof typeof EXERCISES;
+
 export const EXERCISES = {
   "The Sound of A in Far": {
     title: "The Sound of A in Far",
