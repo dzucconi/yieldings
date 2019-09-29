@@ -2,10 +2,10 @@ import React, { useReducer, useRef, useCallback } from "react";
 import styled from "styled-components";
 import { diffChars } from "diff";
 
-import { Textarea } from "./components/Textarea";
-import { useAutoplay } from "./hooks/useAutoplay";
 import { sounds } from "./audio";
-import { EXERCISES } from "./data";
+import { EXERCISES, Title } from "./data";
+import { Textarea } from "./components/Textarea";
+import { Autoplayer } from "./components/Autoplayer";
 
 const diffRemoved = ({
   prevValue,
@@ -89,10 +89,10 @@ const reducer = (state: State, action: Action) => {
 };
 
 interface Props {
-  autoPlay?: boolean;
+  autoPlay?: Title;
 }
 
-const App: React.FC<Props> = ({ autoPlay = false }) => {
+const App: React.FC<Props> = ({ autoPlay = null }) => {
   const textarea = useRef<HTMLTextAreaElement>(null!);
 
   const [state, dispatch] = useReducer(reducer, {
@@ -131,27 +131,30 @@ const App: React.FC<Props> = ({ autoPlay = false }) => {
 
   const handleReset = useCallback(() => dispatch({ type: "RESET" }), []);
 
-  useAutoplay({
-    exercise: EXERCISES[0],
-    autoPlay,
-    onSelect: handleSelect,
-    onAppend: handleAppend,
-    onBackspace: handleBackspace,
-    onReset: handleReset,
-    onUpdate: handleUpdate
-  });
-
   return (
-    <Container>
-      <Textarea
-        value={state.value}
-        autoFocus={state.value === ""}
-        onInput={handleInput}
-        placeholder="Type"
-        ref={textarea}
-      />
-      <Textarea readOnly value={state.removed} placeholder="Removals" />
-    </Container>
+    <>
+      {autoPlay && (
+        <Autoplayer
+          exercise={EXERCISES[autoPlay]}
+          onSelect={handleSelect}
+          onAppend={handleAppend}
+          onBackspace={handleBackspace}
+          onReset={handleReset}
+          onUpdate={handleUpdate}
+        />
+      )}
+
+      <Container>
+        <Textarea
+          value={state.value}
+          autoFocus={state.value === ""}
+          onInput={handleInput}
+          placeholder="Type"
+          ref={textarea}
+        />
+        <Textarea readOnly value={state.removed} placeholder="Removals" />
+      </Container>
+    </>
   );
 };
 
