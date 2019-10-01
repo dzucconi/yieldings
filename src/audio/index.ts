@@ -1,9 +1,9 @@
 import { Howl } from "howler";
 
 // @ts-ignore
-import tock from "./tock.wav";
+import tock from "./tock.mp3";
 
-export const sounds = {
+export const audio = {
   tock: new Howl({
     src: [tock],
     autoplay: false

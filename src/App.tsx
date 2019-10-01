@@ -2,7 +2,7 @@ import React, { useReducer, useRef, useCallback } from "react";
 import styled from "styled-components";
 import { diffChars } from "diff";
 
-import { sounds } from "./audio";
+import { audio } from "./audio";
 import { EXERCISES, Title } from "./data";
 import { Textarea } from "./components/Textarea";
 import { Autoplayer } from "./components/Autoplayer";
@@ -70,7 +70,7 @@ const reducer = (state: State, action: Action) => {
         value: action.payload.value
       };
     case "APPEND": {
-      sounds.tock.play();
+      audio.tock.play();
       const nextValue = state.value + action.payload.character;
       return {
         ...state,
@@ -78,7 +78,7 @@ const reducer = (state: State, action: Action) => {
       };
     }
     case "BACKSPACE": {
-      sounds.tock.play();
+      audio.tock.play();
       return {
         ...state,
         value: state.value.substr(0, state.value.length - 1),
