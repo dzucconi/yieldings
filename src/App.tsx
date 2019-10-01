@@ -147,7 +147,7 @@ const App: React.FC<Props> = ({ autoPlay = null }) => {
       <Container>
         <Textarea
           value={state.value}
-          autoFocus={state.value === ""}
+          autoFocus={state.value === "" || !!autoPlay}
           onInput={handleInput}
           placeholder="Type"
           ref={textarea}
