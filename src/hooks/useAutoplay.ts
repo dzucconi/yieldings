@@ -64,8 +64,11 @@ export const useAutoplay = ({
       stream,
       onStroke: ({ stroke, previousStroke }) => {
         return new Promise(async resolve => {
-          onAppend(stroke.character);
-          await simulateStrokeTiming();
+          // append the character unless it's been omitted
+          if (stroke.character.length !== 0) {
+            onAppend(stroke.character);
+            await simulateStrokeTiming();
+          }
 
           // omitted character, re-append correct one
           if (stroke.character.length === 0) {
