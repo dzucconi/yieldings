@@ -70,7 +70,7 @@ const reducer = (state: State, action: Action) => {
         value: action.payload.value
       };
     case "APPEND": {
-      audio.tock.play();
+      audio[action.payload.character === " " ? "space" : "type"].play();
       const nextValue = state.value + action.payload.character;
       return {
         ...state,
@@ -78,7 +78,7 @@ const reducer = (state: State, action: Action) => {
       };
     }
     case "BACKSPACE": {
-      audio.tock.play();
+      audio.backspace.play();
       return {
         ...state,
         value: state.value.substr(0, state.value.length - 1),

@@ -1,11 +1,13 @@
 import { Howl } from "howler";
-
 // @ts-ignore
-import tock from "./tock.mp3";
+import type from "./type.mp3";
+// @ts-ignore
+import space from "./space.mp3";
+// @ts-ignore
+import backspace from "./backspace.mp3";
 
 export const audio = {
-  tock: new Howl({
-    src: [tock],
-    autoplay: false
-  })
+  type: new Howl({ src: [type], autoplay: false }),
+  space: new Howl({ src: [space], autoplay: false }),
+  backspace: new Howl({ src: [backspace], autoplay: false })
 };
