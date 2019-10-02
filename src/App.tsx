@@ -70,7 +70,7 @@ const reducer = (state: State, action: Action) => {
         value: action.payload.value
       };
     case "APPEND": {
-      audio[action.payload.character === " " ? "space" : "type"].play();
+      // audio[action.payload.character === " " ? "space" : "type"].play();
       const nextValue = state.value + action.payload.character;
       return {
         ...state,
@@ -78,7 +78,7 @@ const reducer = (state: State, action: Action) => {
       };
     }
     case "BACKSPACE": {
-      audio.backspace.play();
+      // audio.backspace.play();
       return {
         ...state,
         value: state.value.substr(0, state.value.length - 1),
@@ -113,21 +113,25 @@ const App: React.FC<Props> = ({ autoPlay = null }) => {
   const handleSelect = useCallback(() => textarea.current.select(), []);
 
   const handleAppend = useCallback((character: string) => {
+    audio[character === " " ? "space" : "type"].play();
+    console.log({ external: character });
     dispatch({
       type: "APPEND",
       payload: { character }
     });
   }, []);
 
-  const handleBackspace = useCallback(
-    () => dispatch({ type: "BACKSPACE" }),
-    []
-  );
+  const handleBackspace = useCallback(() => {
+    audio.backspace.play();
+    dispatch({ type: "BACKSPACE" });
+  }, []);
 
-  const handleUpdate = useCallback(
-    (value: string) => dispatch({ type: "UPDATE", payload: { value } }),
-    []
-  );
+  const handleUpdate = useCallback((value: string) => {
+    dispatch({ type: "UPDATE", payload: { value } });
+    if (value === "") {
+      audio.backspace.play();
+    }
+  }, []);
 
   const handleReset = useCallback(() => dispatch({ type: "RESET" }), []);
 
