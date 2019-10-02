@@ -1,14 +1,6 @@
 import React from "react";
-import { createGlobalStyle } from "styled-components";
 
 import { useAutoplay, Props } from "../../hooks/useAutoplay";
-
-const DisableMouse = createGlobalStyle`
-  html {
-    pointer-events: none;
-    cursor: none;
-  }
-`;
 
 export const Autoplayer: React.FC<Props> = ({
   exercise,
@@ -27,5 +19,5 @@ export const Autoplayer: React.FC<Props> = ({
     onUpdate
   });
 
-  return <DisableMouse />;
+  return null;
 };
