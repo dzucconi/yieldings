@@ -114,7 +114,6 @@ const App: React.FC<Props> = ({ autoPlay = null }) => {
 
   const handleAppend = useCallback((character: string) => {
     audio[character === " " ? "space" : "type"].play();
-    console.log({ external: character });
     dispatch({
       type: "APPEND",
       payload: { character }
