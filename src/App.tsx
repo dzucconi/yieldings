@@ -102,9 +102,10 @@ const App: React.FC<Props> = ({ autoPlay = null }) => {
 
   const handleInput = useCallback(
     (event: React.FormEvent<HTMLTextAreaElement>) => {
+      const { value } = event.currentTarget;
       dispatch({
         type: "UPDATE",
-        payload: { value: event.currentTarget.value }
+        payload: { value }
       });
     },
     []
@@ -114,6 +115,7 @@ const App: React.FC<Props> = ({ autoPlay = null }) => {
 
   const handleAppend = useCallback((character: string) => {
     audio[character === " " ? "space" : "type"].play();
+    textarea.current.focus();
     dispatch({
       type: "APPEND",
       payload: { character }
@@ -122,11 +124,13 @@ const App: React.FC<Props> = ({ autoPlay = null }) => {
 
   const handleBackspace = useCallback(() => {
     audio.backspace.play();
+    textarea.current.focus();
     dispatch({ type: "BACKSPACE" });
   }, []);
 
   const handleUpdate = useCallback((value: string) => {
     dispatch({ type: "UPDATE", payload: { value } });
+    textarea.current.focus();
     if (value === "") {
       audio.backspace.play();
     }
