@@ -4970,10 +4970,10 @@ https-browserify@^1.0.0:
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-1.0.0.tgz#ec06c10e0a34c0f2faf199f7fd7fc78fffd03c73"
   integrity sha1-7AbBDgo0wPL68Zn3/X/Hj//QPHM=
 
-humanization@6.2.2:
-  version "6.2.2"
-  resolved "https://registry.yarnpkg.com/humanization/-/humanization-6.2.2.tgz#edb68f16eb7de9f27934c50a5997ac944591bf02"
-  integrity sha512-DAWvK0KRg0fUHpA99EXdQ4wekCVoCLjOuxIjgxrSi7NPdL1Gps9AGdpRE5yXgOnlsAPLnEANa2jflCXrQ6zC3A==
+humanization@6.3.0:
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/humanization/-/humanization-6.3.0.tgz#ea86f277bc518ce9c1765583a10796eb0e066a77"
+  integrity sha512-8tv42WICif/QyRFuIRgBS7nozJ3Kuf6bjEdycsRsWc/X/FtFlTflkbExm0oI7Lf5AkoipoS8tylbaL2BmQY+ag==
   dependencies:
     "@types/seedrandom" "^2.4.28"
     seedrandom "^3.0.1"
