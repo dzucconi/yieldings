@@ -92,7 +92,7 @@ interface Props {
   autoPlay?: Title;
 }
 
-const App: React.FC<Props> = ({ autoPlay = null }) => {
+export const App: React.FC<Props> = ({ autoPlay = null }) => {
   const textarea = useRef<HTMLTextAreaElement>(null!);
 
   const [state, dispatch] = useReducer(reducer, {
@@ -164,5 +164,3 @@ const App: React.FC<Props> = ({ autoPlay = null }) => {
     </>
   );
 };
-
-export default App;
