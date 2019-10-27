@@ -3,10 +3,7 @@ import { humanize, simulateTyping, simulateStrokeTiming } from "humanization";
 
 import { Exercise } from "../data";
 import { wait } from "../lib/wait";
-
-const PAUSE_MIN = 15;
-const PAUSE_MAX = 250;
-const LONG_PAUSE_MAX = PAUSE_MAX * 2;
+import { pauseMin, pauseMax } from "../config";
 
 type Action = { type: "NEXT" };
 
@@ -72,8 +69,8 @@ export const useAutoplay = ({
           if (stroke.character.length !== 0) {
             onAppend(stroke.character);
             await simulateStrokeTiming({
-              pauseMin: PAUSE_MIN,
-              pauseMax: PAUSE_MAX,
+              pauseMin,
+              pauseMax,
               prevCharacter
             });
           }
@@ -83,8 +80,8 @@ export const useAutoplay = ({
             onAppend(stroke.processedCharacter.source);
 
             await simulateStrokeTiming({
-              pauseMin: PAUSE_MIN,
-              pauseMax: PAUSE_MAX,
+              pauseMin,
+              pauseMax,
               prevCharacter
             });
           }
@@ -96,16 +93,16 @@ export const useAutoplay = ({
           ) {
             onBackspace();
             await simulateStrokeTiming({
-              pauseMin: PAUSE_MIN,
-              pauseMax: PAUSE_MAX,
+              pauseMin,
+              pauseMax,
               prevCharacter
             });
 
             onAppend(stroke.processedCharacter.source);
 
             await simulateStrokeTiming({
-              pauseMin: PAUSE_MIN,
-              pauseMax: LONG_PAUSE_MAX,
+              pauseMin,
+              pauseMax: pauseMax * 2,
               prevCharacter
             });
           }
@@ -117,8 +114,8 @@ export const useAutoplay = ({
           ) {
             onBackspace();
             await simulateStrokeTiming({
-              pauseMin: PAUSE_MIN,
-              pauseMax: PAUSE_MAX,
+              pauseMin,
+              pauseMax,
               prevCharacter
             });
           }
@@ -128,14 +125,14 @@ export const useAutoplay = ({
       }
     })
       .then(async () => {
-        await wait(LONG_PAUSE_MAX * 10);
+        await wait(pauseMax * 20);
         onSelect();
-        await wait(LONG_PAUSE_MAX * 2);
+        await wait(pauseMax * 4);
         onUpdate("");
         return Promise.resolve();
       })
       .then(async () => {
-        await wait(LONG_PAUSE_MAX * 4);
+        await wait(pauseMax * 8);
         onReset();
         dispatch({ type: "NEXT" });
       });
