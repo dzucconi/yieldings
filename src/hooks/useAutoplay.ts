@@ -2,9 +2,11 @@ import { useEffect, useReducer } from "react";
 import { humanize, simulateTyping, simulateStrokeTiming } from "humanization";
 
 import { Exercise } from "../data";
+import { wait } from "../lib/wait";
 
-const wait = (ms: number): Promise<void> =>
-  new Promise(resolve => setTimeout(resolve, ms));
+const PAUSE_MIN = 15;
+const PAUSE_MAX = 250;
+const LONG_PAUSE_MAX = PAUSE_MAX * 2;
 
 type Action = { type: "NEXT" };
 
@@ -63,18 +65,28 @@ export const useAutoplay = ({
     simulateTyping({
       stream,
       onStroke: ({ stroke, previousStroke }) => {
+        const prevCharacter = previousStroke && previousStroke.character;
+
         return new Promise(async resolve => {
           // append the character unless it's been omitted
           if (stroke.character.length !== 0) {
             onAppend(stroke.character);
-            await simulateStrokeTiming();
+            await simulateStrokeTiming({
+              pauseMin: PAUSE_MIN,
+              pauseMax: PAUSE_MAX,
+              prevCharacter
+            });
           }
 
           // omitted character, re-append correct one
           if (stroke.character.length === 0) {
             onAppend(stroke.processedCharacter.source);
 
-            await simulateStrokeTiming();
+            await simulateStrokeTiming({
+              pauseMin: PAUSE_MIN,
+              pauseMax: PAUSE_MAX,
+              prevCharacter
+            });
           }
 
           // mistaken character, backspace then correct
@@ -83,11 +95,19 @@ export const useAutoplay = ({
             stroke.character.length !== 0
           ) {
             onBackspace();
-            await simulateStrokeTiming();
+            await simulateStrokeTiming({
+              pauseMin: PAUSE_MIN,
+              pauseMax: PAUSE_MAX,
+              prevCharacter
+            });
 
             onAppend(stroke.processedCharacter.source);
 
-            await simulateStrokeTiming({ pauseMax: 500 });
+            await simulateStrokeTiming({
+              pauseMin: PAUSE_MIN,
+              pauseMax: LONG_PAUSE_MAX,
+              prevCharacter
+            });
           }
 
           // repeated character, backspace
@@ -96,7 +116,11 @@ export const useAutoplay = ({
             (previousStroke && previousStroke.index.join(""))
           ) {
             onBackspace();
-            await simulateStrokeTiming();
+            await simulateStrokeTiming({
+              pauseMin: PAUSE_MIN,
+              pauseMax: PAUSE_MAX,
+              prevCharacter
+            });
           }
 
           resolve();
@@ -104,14 +128,14 @@ export const useAutoplay = ({
       }
     })
       .then(async () => {
-        await wait(5000);
+        await wait(LONG_PAUSE_MAX * 10);
         onSelect();
-        await wait(1000);
+        await wait(LONG_PAUSE_MAX * 2);
         onUpdate("");
         return Promise.resolve();
       })
       .then(async () => {
-        await wait(2000);
+        await wait(LONG_PAUSE_MAX * 4);
         onReset();
         dispatch({ type: "NEXT" });
       });
