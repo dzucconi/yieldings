@@ -93,7 +93,8 @@ interface Props {
 }
 
 export const App: React.FC<Props> = ({ autoPlay = null }) => {
-  const textarea = useRef<HTMLTextAreaElement>(null!);
+  const inputTextarea = useRef<HTMLTextAreaElement>(null!);
+  const yieldedTextarea = useRef<HTMLTextAreaElement>(null!);
 
   const [state, dispatch] = useReducer(reducer, {
     removed: "",
@@ -111,30 +112,44 @@ export const App: React.FC<Props> = ({ autoPlay = null }) => {
     []
   );
 
-  const handleSelect = useCallback(() => textarea.current.select(), []);
-
-  const handleAppend = useCallback((character: string) => {
-    audio[character === " " ? "space" : "type"].play();
-    textarea.current.focus();
-    dispatch({
-      type: "APPEND",
-      payload: { character }
-    });
+  const scrollToBottom = useCallback(() => {
+    inputTextarea.current.scrollTop = inputTextarea.current.scrollHeight;
+    yieldedTextarea.current.scrollTop = yieldedTextarea.current.scrollHeight;
   }, []);
+
+  const handleSelect = useCallback(() => inputTextarea.current.select(), []);
+
+  const handleAppend = useCallback(
+    (character: string) => {
+      audio[character === " " ? "space" : "type"].play();
+      inputTextarea.current.focus();
+      dispatch({
+        type: "APPEND",
+        payload: { character }
+      });
+      scrollToBottom();
+    },
+    [scrollToBottom]
+  );
 
   const handleBackspace = useCallback(() => {
     audio.backspace.play();
-    textarea.current.focus();
+    inputTextarea.current.focus();
     dispatch({ type: "BACKSPACE" });
-  }, []);
+    scrollToBottom();
+  }, [scrollToBottom]);
 
-  const handleUpdate = useCallback((value: string) => {
-    dispatch({ type: "UPDATE", payload: { value } });
-    textarea.current.focus();
-    if (value === "") {
-      audio.backspace.play();
-    }
-  }, []);
+  const handleUpdate = useCallback(
+    (value: string) => {
+      dispatch({ type: "UPDATE", payload: { value } });
+      inputTextarea.current.focus();
+      if (value === "") {
+        audio.backspace.play();
+      }
+      scrollToBottom();
+    },
+    [scrollToBottom]
+  );
 
   const handleReset = useCallback(() => dispatch({ type: "RESET" }), []);
 
@@ -157,9 +172,15 @@ export const App: React.FC<Props> = ({ autoPlay = null }) => {
           autoFocus={state.value === "" || !!autoPlay}
           onInput={handleInput}
           placeholder="Type"
-          ref={textarea}
+          ref={inputTextarea}
         />
-        <Textarea readOnly value={state.removed} placeholder="Removals" />
+
+        <Textarea
+          readOnly
+          value={state.removed}
+          placeholder="Removals"
+          ref={yieldedTextarea}
+        />
       </Container>
     </>
   );
