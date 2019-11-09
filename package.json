@@ -9,7 +9,7 @@
     "@types/node": "12.12.7",
     "@types/react": "16.9.11",
     "@types/react-dom": "16.9.4",
-    "@types/styled-components": "4.1.22",
+    "@types/styled-components": "4.4.0",
     "audiate": "2.0.0",
     "diff": "4.0.1",
     "howler": "2.1.2",
