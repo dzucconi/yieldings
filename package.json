@@ -12,7 +12,7 @@
     "@types/styled-components": "5.1.10",
     "audiate": "2.0.0",
     "diff": "4.0.2",
-    "howler": "2.2.1",
+    "howler": "2.2.2",
     "humanization": "6.3.1",
     "queryparams": "0.1.0",
     "react": "16.14.0",
